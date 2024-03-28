@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html id="html">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hello Bulma!</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.0/css/bulma.min.css">
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+</head>
+
+<body>
+  <section class="hero is-primary is-medium">
+    <!-- Hero head: will stick at the top -->
+    <div class="hero-head">
+      <nav class="navbar">
+        <div class="container has-text-right">
+          <div class="navbar-end">
+            <span class="navbar-item">
+              <button class="button is-white is-medium" id="switchTheme">
+                <span class="material-symbols-outlined mr-3" id="icon">light_mode</span>
+                ライトモード
+              </button>
+            </span>
+          </div>
+        </div>
+      </nav>
+    </div>
+
+    <!-- Hero content: will be in the middle -->
+    <div class="hero-body">
+      <div class="container has-text-centered">
+        <p class="title">元素の学習ツール</p>
+      </div>
+    </div>
+  </section>
+  <div class="container">
+    <div class="container p-5" id="main_screen">
+      <div class="columns">
+        <div class="column">
+          <button class="button is-medium is-fullwidth is-primary" id="easy">イージー</button>
+        </div>
+        <div class="column">
+          <button class="button is-medium is-fullwidth is-primary" id="normal">ノーマル</button>
+        </div>
+        <div class="column">
+          <button class="button is-medium is-fullwidth is-primary" id="hard">ハード</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="theme.js"></script>
+</body>
+
+</html>
