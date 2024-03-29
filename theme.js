@@ -1,25 +1,36 @@
+// Execute discriminationTheme function on page load to determine if it's the first visit
+// If it's the first visit, set the theme based on the device's theme. Otherwise, apply the previous theme.
+// Use addEventListener to switch the theme every time the button is clicked.
+
+// Definition of variables and constants
 const html = document.getElementById("html");
 const button = document.getElementById("switchTheme");
-const icon = document.getElementById("icon");
+var status = "";
+console.log("initialized variables");
 
+// Mark the page as visited
 function applyVisited(status) {
-  status = "";
-  sessionStorage.setItem("status", status);
+  localStorage.setItem("status", status);
+  console.log("done applyVisited");
 }
 
+// Apply the theme
 function applyTheme(themeName) {
-  sessionStorage.setItem("theme", themeName);
+  localStorage.setItem("theme", themeName);
   html.setAttribute("data-theme", themeName);
-  if (themeName === "dark") {
-    button.textContent = "ダークモード";
-    icon.textContent = "dark_mode";
-  } else if (themeName === "light") {
-    button.textContent = "ライトモード";
-    icon.textContent = "light_mode";
+  if (themeName == "dark") {
+    button.setAttribute("data-theme", "light");
+    button.innerHTML = '<span class="material-symbols-outlined mr-3">light_mode</span>ライトモード';
+    console.log("switched to dark theme");
+  } else if (themeName == "light") {
+    button.setAttribute("data-theme", "dark");
+    button.innerHTML = '<span class="material-symbols-outlined mr-3">dark_mode</span>ダークモード';
+    console.log("switched to light theme");
   }
+  console.log("done applyTheme");
 }
 
-
+// Initialize the theme
 function initialTheme() {
   const isDark = matchMedia("(prefers-color-scheme: dark)").matches;
   if (isDark) {
@@ -27,33 +38,49 @@ function initialTheme() {
   } else {
     applyTheme("light");
   }
+  console.log("done initialTheme");
 }
 
+// Retrieve the saved theme
 function getStorageTheme() {
-  const storageTheme = sessionStorage.getItem("theme");
-  if (storageTheme !== "dark") {
+  const storageTheme = localStorage.getItem("theme");
+  if (storageTheme == "dark") {
     applyTheme("dark");
   } else {
     applyTheme("light");
   }
+  console.log("done getStorageTheme");
 }
 
-
+// Determine if it's the first visit
 function discriminationTheme() {
-  const getStrageVisited = sessionStorage.getItem("status");
+  const getStrageVisited = localStorage.getItem("status");
   if (getStrageVisited) {
     getStorageTheme();
   } else {
     initialTheme();
-    applyVisited("visted");
+    applyVisited("visited");
   }
+  console.log("done discriminationTheme");
 }
 
-document.getElementById("switchTheme").addEventListener('click', () => {  
-  const storageTheme = sessionStorage.getItem("theme");
-  if (storageTheme !== "theme-dark") {
+// Switch the theme
+function switchTheme() { 
+  const storageTheme = localStorage.getItem("theme");
+  if (storageTheme != "dark") {
     applyTheme("dark");
   } else {
     applyTheme("light");
   }
-})
+  console.log("done switchTheme");
+}
+
+// Add event listener for the button click event to switch the theme
+button.addEventListener('click', () => {
+  switchTheme();
+});
+
+// Add event listener for page load event to run discriminationTheme function
+window.addEventListener("load", (event) => {
+  discriminationTheme()
+});
