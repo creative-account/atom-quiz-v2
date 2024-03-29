@@ -1,10 +1,10 @@
 // Execute discriminationTheme function on page load to determine if it's the first visit
 // If it's the first visit, set the theme based on the device's theme. Otherwise, apply the previous theme.
-// Use addEventListener to switch the theme every time the button is clicked.
+// Use addEventListener to switch the theme every time the themeSwitchButton is clicked.
 
 // Definition of variables and constants
 const html = document.getElementById("html");
-const button = document.getElementById("switchTheme");
+const themeSwitchButton = document.getElementById("switchTheme");
 var status = "";
 
 // Mark the page as visited
@@ -17,11 +17,11 @@ function applyTheme(themeName) {
   localStorage.setItem("theme", themeName);
   html.setAttribute("data-theme", themeName);
   if (themeName == "dark") {
-    button.setAttribute("data-theme", "light");
-    button.innerHTML = '<span class="material-symbols-outlined mr-3">light_mode</span>ライトモード';
+    themeSwitchButton.setAttribute("data-theme", "light");
+    themeSwitchButton.innerHTML = '<span class="material-symbols-outlined mr-3">light_mode</span>ライトモード';
   } else if (themeName == "light") {
-    button.setAttribute("data-theme", "dark");
-    button.innerHTML = '<span class="material-symbols-outlined mr-3">dark_mode</span>ダークモード';
+    themeSwitchButton.setAttribute("data-theme", "dark");
+    themeSwitchButton.innerHTML = '<span class="material-symbols-outlined mr-3">dark_mode</span>ダークモード';
   }
 }
 
@@ -66,8 +66,8 @@ function switchTheme() {
   }
 }
 
-// Add event listener for the button click event to switch the theme
-button.addEventListener('click', () => {
+// Add event listener for the themeSwitchButton click event to switch the theme
+themeSwitchButton.addEventListener('click', () => {
   switchTheme();
 });
 
