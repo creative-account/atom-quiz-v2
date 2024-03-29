@@ -19,11 +19,9 @@ function applyTheme(themeName) {
   if (themeName == "dark") {
     button.setAttribute("data-theme", "light");
     button.innerHTML = '<span class="material-symbols-outlined mr-3">light_mode</span>ライトモード';
-    console.log("switched to dark theme");
   } else if (themeName == "light") {
     button.setAttribute("data-theme", "dark");
     button.innerHTML = '<span class="material-symbols-outlined mr-3">dark_mode</span>ダークモード';
-    console.log("switched to light theme");
   }
 }
 
