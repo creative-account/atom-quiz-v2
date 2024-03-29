@@ -16,7 +16,7 @@ function deleteElements() {
 
 // Function to display buttons for selecting levels
 function createLevelSelectButtons() {
-  const buttonTexts = ['Easy', 'Normal', 'Hard']; // Button texts
+  const buttonTexts = ['イージー', 'ノーマル', 'ハード']; // Button texts
   const buttonIds = ['easy', 'normal', 'hard']; // Button IDs
 
   const divColumns = document.createElement('div'); // Create columns element
