@@ -6,12 +6,10 @@
 const html = document.getElementById("html");
 const button = document.getElementById("switchTheme");
 var status = "";
-console.log("initialized variables");
 
 // Mark the page as visited
 function applyVisited(status) {
   localStorage.setItem("status", status);
-  console.log("done applyVisited");
 }
 
 // Apply the theme
@@ -27,7 +25,6 @@ function applyTheme(themeName) {
     button.innerHTML = '<span class="material-symbols-outlined mr-3">dark_mode</span>ダークモード';
     console.log("switched to light theme");
   }
-  console.log("done applyTheme");
 }
 
 // Initialize the theme
@@ -38,7 +35,6 @@ function initialTheme() {
   } else {
     applyTheme("light");
   }
-  console.log("done initialTheme");
 }
 
 // Retrieve the saved theme
@@ -49,7 +45,6 @@ function getStorageTheme() {
   } else {
     applyTheme("light");
   }
-  console.log("done getStorageTheme");
 }
 
 // Determine if it's the first visit
@@ -60,8 +55,7 @@ function discriminationTheme() {
   } else {
     initialTheme();
     applyVisited("visited");
-  }
-  console.log("done discriminationTheme");
+  };
 }
 
 // Switch the theme
@@ -72,7 +66,6 @@ function switchTheme() {
   } else {
     applyTheme("light");
   }
-  console.log("done switchTheme");
 }
 
 // Add event listener for the button click event to switch the theme
