@@ -38,12 +38,46 @@
     <!-- class : 要素の種類 色 サイズ 特徴 -->
     <div class="container p-5" id="main_screen">
       <div class="has-text-centered">
+        <h2 class="title">問題選択</h2>
+        <div class="is-flex is-justify-content-center is-align-items-center">
+          <div class="select mr-5 is-primary">
+            <select name="from" id="from">
+              <option value="0">元素記号</option>
+              <option value="1">元素名</option>
+              <option value="2">原子番号</option>
+            </select>
+          </div>
+          から
+          <div class="select ml-5 is-primary">
+            <select name="to" id="to">
+              <option value="0">元素記号</option>
+              <option value="1" selected>元素名</option>
+              <option value="2">原子番号</option>
+            </select>
+          </div>
+        </div>
+        <br>
+        <div id="error_message"></div>
+        <br>
+        <h2 class="title">レベル選択</h2>
+        <div class="select is-primary">
+          <select name="level" id="level">
+            <option value="20">EASY MODE</option>
+            <option value="50" selected>NORMAL MODE</option>
+            <option value="75">HARD MODE</option>
+            <option value="118">LUNATIC MODE</option>
+          </select>
+        </div>
+        <br>
+        <br>
         <button class="button is-primary is-medium is-rounded" id="start">始める</button>
       </div>
     </div>
   </div>
   <script src="theme.js"></script>
-  <script src="level_selection.js"></script>
+  <script src="quiz.js" type="module"></script>
+  <script src="mode_select.js"></script>
+  <script type="module" src="data.js"></script>
 </body>
 
 </html>
