@@ -92,21 +92,24 @@ function generateQuestion() {
 }
 
 async function displayQuestion() {
+  var questions = [];
+  var answer = [];
   for (var i = 0; i < 20; i++) {
     var options = generateQuestion();
     var level = localStorage.getItem("level");
     var from = localStorage.getItem("from");
     var to = localStorage.getItem("to");
-    
+    var question = options[3];
+    questions.push(question);
     switch  (from) {
       case "0":
-        var question = "原子番号 " + elements_list[options[3]][from];
+        var question = "原子番号 " + elements_list[question][from];
         break;
       case "1":
-        var question = "元素記号 " + elements_list[options[3]][from];
+        var question = "元素記号 " + elements_list[question][from];
         break;
       case "2":
-        var question = "元素名 " + elements_list[options[3]][from];
+        var question = "元素名 " + elements_list[question][from];
         break;
       default:
         var question = "エラーです。m9(^Д^)ﾌﾟｷﾞｬｰ"
@@ -124,12 +127,27 @@ async function displayQuestion() {
       new Promise(resolve => option2.addEventListener("click", () => resolve(optionTexts[1]))),
       new Promise(resolve => option3.addEventListener("click", () => resolve(optionTexts[2])))
     ]);
-    // ユーザーが選択したオプションを処理する
-    // ここでユーザーの回答に対する処理を実装
-    // 例えば、回答の正誤をチェックして結果を表示するなど
-    console.info(i);
+    console.info("OK");
+    answer.push(user_selected);
+  }
+  localStorage.setItem("questions", questions);
+  localStorage.setItem("answer", answer);
+  setTimeout(clearMainScreen, 1500);
+}
+
+function compareAnswer() {
+  var questions = localStorage.getItem("questions");
+  var answer = localStorage.getItem("answer");
+  t_or_f = [];
+  for (var i = 0; i < 20; i++) {
+    if (elements_list[questions[i]][0] == answer[i]) {
+      t_or_f.push(true);
+    } else {
+      t_or_f.push(false);
+    }
   }
 
+  localStorage.setItem("t_or_f", t_or_f);
 }
 
 start_button.addEventListener("click", function() {
