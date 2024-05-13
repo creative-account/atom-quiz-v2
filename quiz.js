@@ -70,30 +70,49 @@ function createQuizFrame(question, optionTexts, to){
 }
 
 
+// 出題済みの問題を格納する配列
+var askedQuestions = [];
+
 function generateQuestion() {
   var level = localStorage.getItem("level");
   var from = localStorage.getItem("from");
   var to = localStorage.getItem("to");
   clearMainScreen();
   var options = [];
-  // Create an option
-  for (var i = 0; i < 3; i++) {
-    var option = randBetween(1, level);
-    // if the option is the same as the correct answer, generate a new option
-    while (options.includes(option)) {
-      option = randBetween(1, level);
+  var question;
+  
+  do {
+    // 新しい問題を生成
+    options = [];
+    for (var i = 0; i < 3; i++) {
+      var option = randBetween(1, level);
+      // if the option is the same as the correct answer or already asked, generate a new option
+      while (options.includes(option) || askedQuestions.includes(option)) {
+        option = randBetween(1, level);
+      }
+      options.push(option);
     }
-    options.push(option);
-  }
-  var correct = options[randBetween(0, 2)] // 正しい答えのインデックスを生成
-  options.push(correct);
-  options = shuffle(options);
+    // 正解のインデックスを生成
+    var correct = options[randBetween(0, 2)];
+    options.push(correct);
+    options = shuffle(options);
+    // 出題済みの問題として登録
+    askedQuestions.push(options[3]);
+    // 出題された問題が20問に達しているかどうかを確認
+    if (askedQuestions.length >= 20) {
+      // 出題数が20問に達したら、出題済み問題リストをリセット
+      askedQuestions = [];
+    }
+    // 出題された問題が20問に達していなければ、ループを終了
+  } while (askedQuestions.length < 20);
+  
   return options;
 }
 
 async function displayQuestion() {
   var questions = [];
   var answer = [];
+  // 20問の問題を生成して出題
   for (var i = 0; i < 20; i++) {
     var options = generateQuestion();
     var level = localStorage.getItem("level");
@@ -127,13 +146,17 @@ async function displayQuestion() {
       new Promise(resolve => option2.addEventListener("click", () => resolve(optionTexts[1]))),
       new Promise(resolve => option3.addEventListener("click", () => resolve(optionTexts[2])))
     ]);
-    console.info("OK");
+    // 出題された問題の回答を保存
     answer.push(user_selected);
   }
   localStorage.setItem("questions", questions);
   localStorage.setItem("answer", answer);
-  setTimeout(clearMainScreen, 1500);
+  setTimeout(clearMainScreen, 1000);
+  compareAnswer();
 }
+
+
+
 
 function compareAnswer() {
   var questions = localStorage.getItem("questions");
