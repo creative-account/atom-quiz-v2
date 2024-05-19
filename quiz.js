@@ -2,16 +2,23 @@ import { elements_list } from "./data.js";
 import { clearMainScreen } from "./functions.js";
 const start_button = document.getElementById("start");
 const main_screen = document.getElementById("main_screen");
+var curQuizIdx = 0;
+var quizzes = [];
+var answers = [];
+var corrBtnIdx = [];
 
 
 
 function getMode() {
-  var level = document.getElementById("level").value;
-  var from = document.getElementById("from").value;
-  var to = document.getElementById("to").value;
+
+  const level = document.getElementById("level").value;
+  const from = document.getElementById("from").value;
+  const to = document.getElementById("to").value;
+
   localStorage.setItem("level", level);
   localStorage.setItem("from", from);
   localStorage.setItem("to", to);
+
 }
 
 function randBetween(min, max) {
@@ -19,21 +26,19 @@ function randBetween(min, max) {
 }
 
 function shuffle(array) {
-  var correct = array[3];
-  array = array.slice(0, 3);
   for (let i = array.length - 1; i > 0; i--) {
     const j = randBetween(0, i);
     [array[i], array[j]] = [array[j], array[i]];
   }
-  array.push(correct);
+
   return array;
 }
 
-function createQuizFrame(question, optionTexts, to){
-    // 新しい要素を作成
+function createQuizFrame(){
+  // 新しい要素を作成
   const newDiv = document.createElement("div");
   newDiv.className = "box is-size-3 has-text-centered";
-  newDiv.textContent = question;
+  newDiv.id = "quizFrame";
 
   // 改行要素を作成
   const brElements = document.createElement("br");
@@ -44,20 +49,19 @@ function createQuizFrame(question, optionTexts, to){
   // columns 要素を作成
   const columnsDiv = document.createElement("div");
   columnsDiv.className = "columns";
-  columnsDiv.id = "options";
+  columnsDiv.id = "optionButtons";
 
   // オプションのボタンを生成して columns 要素に追加
-  for (let i = 0; i < optionTexts.length; i++) {
+  for (var i = 0; i < 3; i++) {
     const column = document.createElement("div");
     column.className = "column";
 
     const button = document.createElement("button");
-    button.className = "button is-primary is-fullwidth is-medium";
+    button.className = "button is-primary is-fullwidth is-medium option";
+    button.addEventListener("click", function() {
+      getAns(i);
+    });
     button.id = optionIds[i];
-    button.textContent = elements_list[optionTexts[i]][to];
-    console.log(elements_list[optionTexts[i]][to]);
-    console.log(optionTexts[i]);
-    console.log(i)
 
     column.appendChild(button);
     columnsDiv.appendChild(column);
@@ -69,111 +73,92 @@ function createQuizFrame(question, optionTexts, to){
   main_screen.appendChild(columnsDiv);
 }
 
-
-// 出題済みの問題を格納する配列
-var askedQuestions = [];
-
-function generateQuestion() {
+function genQuiz() {
   var level = localStorage.getItem("level");
-  var from = localStorage.getItem("from");
-  var to = localStorage.getItem("to");
-  clearMainScreen();
   var options = [];
-  var question;
-  
   do {
-    // 新しい問題を生成
     options = [];
-    for (var i = 0; i < 3; i++) {
-      var option = randBetween(1, level);
-      // if the option is the same as the correct answer or already asked, generate a new option
-      while (options.includes(option) || askedQuestions.includes(option)) {
-        option = randBetween(1, level);
+    while (options.length < 3) {
+      var temp = randBetween(0, level);
+      if (!options.includes(temp)) {
+        options.push(temp);
       }
-      options.push(option);
     }
-    // 正解のインデックスを生成
-    var correct = options[randBetween(0, 2)];
-    options.push(correct);
     options = shuffle(options);
-    // 出題済みの問題として登録
-    askedQuestions.push(options[3]);
-    // 出題された問題が20問に達しているかどうかを確認
-    if (askedQuestions.length >= 20) {
-      // 出題数が20問に達したら、出題済み問題リストをリセット
-      askedQuestions = [];
-    }
-    // 出題された問題が20問に達していなければ、ループを終了
-  } while (askedQuestions.length < 20);
-  
+    var rand = randBetween(0, 2);
+    var quis = options[rand];
+  } while (quizzes.includes(quis));
+    quizzes.push(quis);
+    corrBtnIdx.push(rand);
+  console.log(options);
+  console.log(corrBtnIdx);
   return options;
 }
 
-async function displayQuestion() {
-  var questions = [];
-  var answer = [];
-  // 20問の問題を生成して出題
-  for (var i = 0; i < 20; i++) {
-    var options = generateQuestion();
-    var level = localStorage.getItem("level");
-    var from = localStorage.getItem("from");
-    var to = localStorage.getItem("to");
-    var question = options[3];
-    questions.push(question);
-    switch  (from) {
-      case "0":
-        var question = "原子番号 " + elements_list[question][from];
-        break;
-      case "1":
-        var question = "元素記号 " + elements_list[question][from];
-        break;
-      case "2":
-        var question = "元素名 " + elements_list[question][from];
-        break;
-      default:
-        var question = "エラーです。m9(^Д^)ﾌﾟｷﾞｬｰ"
-    }
-    
-    var optionTexts = options.slice(0, 3);
-
-    createQuizFrame(question, optionTexts, to);
-    var option1 = document.getElementById("option1");
-    var option2 = document.getElementById("option2");
-    var option3 = document.getElementById("option3");
-    
-    var user_selected = await Promise.race([
-      new Promise(resolve => option1.addEventListener("click", () => resolve(optionTexts[0]))),
-      new Promise(resolve => option2.addEventListener("click", () => resolve(optionTexts[1]))),
-      new Promise(resolve => option3.addEventListener("click", () => resolve(optionTexts[2])))
-    ]);
-    // 出題された問題の回答を保存
-    answer.push(user_selected);
+function genPreText() {
+  var from = localStorage.getItem("from");
+  switch (from) {
+    case "0":
+      var preText = "原子番号 ";
+      break;
+    case "1":
+      var preText = "元素記号 ";
+      break;
+    case "2":
+      var preText = "元素名 ";
+      break;
   }
-  localStorage.setItem("questions", questions);
-  localStorage.setItem("answer", answer);
-  setTimeout(clearMainScreen, 1000);
-  compareAnswer();
+  return preText;
 }
 
+function displayQuiz() {
+  var quizFrame = document.getElementById("quizFrame");
+  var from = localStorage.getItem("from");
+  var to = localStorage.getItem("to");
+  var options = genQuiz();
+  var quiz = quizzes[curQuizIdx];
+  var preText = genPreText();
 
+  var quiz = preText + elements_list[quiz][from];
+  quizFrame.textContent = quiz;
 
+  const buttons = document.getElementsByClassName('option');
+  for (let j = 0; j < 3; j++) {
+    buttons[j].textContent = elements_list[options[j]][to];
+    buttons[j].value = elements_list[options[j]][to];
+  }
+
+  console.log(curQuizIdx);
+  curQuizIdx++;
+}
+
+function getAns(btnIdx) {
+  answers.push(btnIdx);
+  if (answers.length < 20) {
+    displayQuiz();
+  } else {
+    console.log("end");
+  }
+}
 
 function compareAnswer() {
-  var questions = localStorage.getItem("questions");
+  var quizs = localStorage.getItem("quizs");
   var answer = localStorage.getItem("answer");
-  t_or_f = [];
+  tORf = [];
   for (var i = 0; i < 20; i++) {
-    if (elements_list[questions[i]][0] == answer[i]) {
-      t_or_f.push(true);
+    if (elements_list[quizs[i]][0] == answer[i]) {
+      tORf.push(true);
     } else {
-      t_or_f.push(false);
+      tORf.push(false);
     }
   }
 
-  localStorage.setItem("t_or_f", t_or_f);
+  localStorage.setItem("tORf", tORf);
 }
 
 start_button.addEventListener("click", function() {
   getMode();
-  displayQuestion();
+  clearMainScreen();
+  createQuizFrame();
+  displayQuiz();
 });
