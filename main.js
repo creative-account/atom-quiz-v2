@@ -15,9 +15,9 @@ let correctButtonIndices = [];
 let correctness = [];
 
 function getMode() {
-  difficultyLevel = document.getElementById("level").value;
-  fromAttribute = document.getElementById("from").value;
-  toAttribute = document.getElementById("to").value;
+  difficultyLevel = Number(document.getElementById("level").value);
+  fromAttribute = Number(document.getElementById("from").value);
+  toAttribute = Number(document.getElementById("to").value);
 }
 
 function getRandomInteger(min, max) {
@@ -87,12 +87,17 @@ function getPreText() {
   switch (fromAttribute) {
     case 0:
       return "原子番号 ";
+      break;
     case 1:
       return "元素記号 ";
+      break;
     case 2:
       return "元素名 ";
+      break;
     default:
+      console.error("エラーでーす m9(^Д^)ﾌﾟｷﾞｬｰ")
       return "";
+      break;
   }
 }
 
@@ -137,41 +142,42 @@ function countCorrectAnswers() {
 function displayScore() {
   const correctCount = countCorrectAnswers();
   const wrongCount = correctness.length - correctCount;
-
   const scoreDiv = document.createElement('div');
   scoreDiv.classList.add('box');
   const columnsDiv = document.createElement('div');
   columnsDiv.classList.add('columns');
-
-  const correctColumn = document.createElement('div');
-  correctColumn.classList.add('column');
-
-  const checkSpan = document.createElement('span');
-  checkSpan.classList.add('material-symbols-outlined', 'correct', 'has-text-success', 'mr-4', 'big-icon');
-  checkSpan.textContent = 'check';
-  const correctSpan = document.createElement('span');
-  correctSpan.classList.add('is-size-3');
-  correctSpan.id = 'correct';
-  correctSpan.textContent = correctCount;
-  correctColumn.append(checkSpan, correctSpan);
-
-  const wrongColumn = document.createElement('div');
-  wrongColumn.classList.add('column');
-  const closeSpan = document.createElement('span');
-  closeSpan.classList.add('material-symbols-outlined', 'has-text-danger', 'mr-4', 'big-icon');
-  closeSpan.textContent = 'close';
-  const wrongSpan = document.createElement('span');
-  wrongSpan.classList.add('is-size-3');
-  wrongSpan.id = 'wrong';
-  wrongSpan.textContent = wrongCount;
-  wrongColumn.append(closeSpan, wrongSpan);
-
-  columnsDiv.append(correctColumn, wrongColumn);
+  for (let i = 0; i < 5; i++) {
+    const column = document.createElement('div');
+    column.classList.add('column');
+    if (i === 1) {
+      const checkSpan = document.createElement('span');
+      checkSpan.classList.add('material-symbols-outlined', 'correct', 'has-text-success', 'mr-4', 'big-icon');
+      checkSpan.textContent = 'check';
+      const correctSpan = document.createElement('span');
+      correctSpan.classList.add('is-size-3');
+      correctSpan.id = 'correct';
+      correctSpan.textContent = correctCount;
+      column.appendChild(checkSpan);
+      column.appendChild(correctSpan);
+    } else if (i === 3) {
+      const closeSpan = document.createElement('span');
+      closeSpan.classList.add('material-symbols-outlined', 'has-text-danger', 'mr-4', 'big-icon');
+      closeSpan.textContent = 'close';
+      const wrongSpan = document.createElement('span');
+      wrongSpan.classList.add('is-size-3');
+      wrongSpan.id = 'wrong';
+      wrongSpan.textContent = wrongCount;
+      column.appendChild(closeSpan);
+      column.appendChild(wrongSpan);
+    }
+    columnsDiv.appendChild(column);
+  }
   scoreDiv.appendChild(columnsDiv);
   mainScreen.appendChild(scoreDiv);
 
   displayAnswerTable();
 }
+
 
 function displayAnswerTable() {
   const tableDiv = document.createElement('div');
@@ -257,11 +263,13 @@ function resetQuiz() {
   answerButtonIndices = [];
   correctButtonIndices = [];
   correctness = [];
+  clearMainScreen();
 }
 
 function displayModeSelectionScreen() {
   // Display the initial mode selection screen
   // (Assuming this is implemented in another function)
+  createAndAppendMainScreenContent();
 }
 
 function createAndAppendMainScreenContent() {
