@@ -154,7 +154,7 @@ function displayScore() {
       checkSpan.classList.add('material-symbols-outlined', 'correct', 'has-text-success', 'mr-4', 'big-icon');
       checkSpan.textContent = 'check';
       const correctSpan = document.createElement('span');
-      correctSpan.classList.add('is-size-3');
+      correctSpan.classList.add('is-size-3', 'has-text-centered');
       correctSpan.id = 'correct';
       correctSpan.textContent = correctCount;
       column.appendChild(checkSpan);
@@ -164,7 +164,7 @@ function displayScore() {
       closeSpan.classList.add('material-symbols-outlined', 'has-text-danger', 'mr-4', 'big-icon');
       closeSpan.textContent = 'close';
       const wrongSpan = document.createElement('span');
-      wrongSpan.classList.add('is-size-3');
+      wrongSpan.classList.add('is-size-3', 'has-text-centered');
       wrongSpan.id = 'wrong';
       wrongSpan.textContent = wrongCount;
       column.appendChild(closeSpan);
