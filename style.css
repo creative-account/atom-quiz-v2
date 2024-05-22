@@ -5,3 +5,7 @@
 .big-icon {
   font-size: 2rem;
 }
+
+#quizFrame {
+  word-break: keep-all;
+}

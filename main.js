@@ -107,7 +107,7 @@ function displayQuiz() {
   const quiz = quizzes[currentQuizIndex];
   const preText = getPreText();
 
-  quizFrame.textContent = preText + elements_list[quiz][fromAttribute];
+  quizFrame.innerHTML = preText + "<wbr>" + elements_list[quiz][fromAttribute];
 
   const buttons = document.getElementsByClassName('option');
   for (let i = 0; i < buttons.length; i++) {
