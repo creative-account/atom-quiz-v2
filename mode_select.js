@@ -1,8 +1,6 @@
-const error_message = document.getElementById("error_message");
-const start_button = document.getElementById("start");
-
-function isSameMode() {
-  
+export function isSameMode() {
+  const error_message = document.getElementById("error_message");
+  const start_button = document.getElementById("start");
   const from = document.getElementById("from").value;
   const to = document.getElementById("to").value;
   if (from == to) {
@@ -15,15 +13,3 @@ function isSameMode() {
 
 }
 
-// 
-window.addEventListener("DOMContentLoaded", function() {
-  isSameMode();
-});
-
-document.getElementById("from").addEventListener("change", function() {
-  isSameMode();
-});
-
-document.getElementById("to").addEventListener("change", function() {
-  isSameMode();
-});

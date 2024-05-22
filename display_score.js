@@ -1,62 +1,125 @@
-import { elements_list } from "./data";
+import { elements_list } from "./data.js";
+import { clearMainScreen } from "./functions.js";
+const main_screen = document.getElementById("main_screen");
+var tORf = localStorage.getItem("tORf");
+var correctCount = 0;
+var wrongCount = 0;
 
-function displayScore() {
-  var t_or_f = localStorage.getItem("t_or_f");
-  
+function countCorrect() {
+  for (let i = 0; i < tORf.length; i++) {
+    if (tORf[i] == "正解") {
+      correctCount++;
+    }
+  }
+  wrongCount = tORf.length - correctCount;
+  console.log(correctCount, wrongCount);
 }
 
-// 要素を作成する関数
-function createTable() {
+export function displayScore() {
   var from = localStorage.getItem("from");
   var to = localStorage.getItem("to");
-  const boxDiv = document.createElement("div");
-  boxDiv.className = "box";
+  var quizzes = localStorage.getItem("quizzes");
+  var answers = localStorage.getItem("answers");
+  console.log(quizzes);
+  countCorrect();
+  const mainScreen = document.getElementById('main_screen');
+  var newDiv = document.createElement('div');
+  newDiv.classList.add('box');
+  const columnsDiv = document.createElement('div');
+  columnsDiv.classList.add('columns');
+  for (let i = 0; i < 5; i++) {
+    const columnDiv = document.createElement('div');
+    columnDiv.classList.add('column');
+    if (i === 1) {
+      const checkSpan = document.createElement('span');
+      checkSpan.classList.add('material-symbols-outlined', 'correct', 'has-text-success', 'mr-4', 'big-icon');
+      checkSpan.textContent = 'check';
+      const correctSpan = document.createElement('span');
+      correctSpan.classList.add('is-size-3');
+      correctSpan.id = 'correct';
+      correctSpan.textContent = correctCount;
+      columnDiv.appendChild(checkSpan);
+      columnDiv.appendChild(correctSpan);
+    } else if (i === 3) {
+      const closeSpan = document.createElement('span');
+      closeSpan.classList.add('material-symbols-outlined', 'has-text-danger', 'mr-4' , 'big-icon');
+      closeSpan.textContent = 'close';
+      const wrongSpan = document.createElement('span');
+      wrongSpan.classList.add('is-size-3');
+      wrongSpan.id = 'wrong';
+      wrongSpan.textContent = wrongCount;
+      columnDiv.appendChild(closeSpan);
+      columnDiv.appendChild(wrongSpan);
+    }
+    columnsDiv.appendChild(columnDiv);
+  }
+  newDiv.appendChild(columnsDiv);
+  mainScreen.appendChild(newDiv);
+  var newDiv = null;
+  // 新しいdiv要素を作成
+  var newDiv = document.createElement('div');
+  newDiv.classList.add('box');
 
-  const table = document.createElement("table");
-  table.className = "table";
+  // table要素を作成
+  const table = document.createElement('table');
+  table.classList.add('table', 'is-fullwidth', 'is-striped');
 
-  // 20行のループでtr要素を作成
-  for (let i = 0; i < 20; i++) {
-    const tr = document.createElement("tr");
+  // thead要素を作成
+  const thead = document.createElement('thead');
+  const theadRow = document.createElement('tr');
+  const th1 = document.createElement('th');
+  th1.textContent = '問題';
+  const th2 = document.createElement('th');
+  th2.textContent = '正誤';
+  const th3 = document.createElement('th');
+  th3.textContent = '正解';
+  const th4 = document.createElement('th');
+  th4.textContent = 'あなたの解答';
 
-    // 各行に4つのtd要素を作成
-    for (let j = 0; j < 4; j++) {
-      const td = document.createElement("td");
-      switch (j) {
+  // theadRowにth要素を追加
+  theadRow.appendChild(th1);
+  theadRow.appendChild(th2);
+  theadRow.appendChild(th3);
+  theadRow.appendChild(th4);
+
+  // theadにtheadRowを追加
+  thead.appendChild(theadRow);
+
+  // tbody要素を作成
+  const tbody = document.createElement('tbody');
+
+  // tbodyに20個のtr要素を追加
+  for (let row = 0; row < 20; row++) {
+    const tbodyRow = document.createElement('tr');
+    for (let col = 0; col < 4; col++) {
+      const td = document.createElement('td');
+      switch (col) {
         case 0:
-          td.textContent = elements_list[i][from];
+          td.textContent = elements_list[quizzes[row]][from];
           break;
         case 1:
-          if (t_or_f == "true") {
-            td.textContent = "正解";
-          }else{
-            td.textContent = "不正解";
-          }
+          td.textContent = tORf[row];
           break;
         case 2:
-          td.textContent = "3";
+          td.textContent = elements_list[quizzes[row]][to];
           break;
         case 3:
-          td.textContent = "4";
+          td.textContent = elements_list[answers[row]][to];
           break;
       }
-      tr.appendChild(td);
+      tbodyRow.appendChild(td);
     }
-
-    table.appendChild(tr);
+    tbody.appendChild(tbodyRow);
   }
 
-  boxDiv.appendChild(table);
-  return boxDiv;
-}
+  // tableにtheadとtbodyを追加
+  table.appendChild(thead);
+  table.appendChild(tbody);
 
-// 要素をbodyに追加する関数
-function appendTableToBody() {
-  const table = createTable();
-  document.body.appendChild(table);
-}
+  // newDivにtableを追加
+  newDiv.appendChild(table);
 
-// ページ読み込み時に実行
-window.addEventListener("DOMContentLoaded", function() {
-  appendTableToBody();
-});
+  // newDivをmainScreenに追加
+  mainScreen.appendChild(newDiv);
+
+}

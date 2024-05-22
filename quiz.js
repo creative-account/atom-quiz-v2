@@ -1,16 +1,15 @@
 import { elements_list } from "./data.js";
 import { clearMainScreen } from "./functions.js";
+import { displayScore } from "./display_score.js";
 const start_button = document.getElementById("start");
 const main_screen = document.getElementById("main_screen");
 var curQuizIdx = 0;
 var quizzes = [];
 var answers = [];
+var ansBtnIdx = [];
 var corrBtnIdx = [];
 
-
-
 function getMode() {
-
   const level = document.getElementById("level").value;
   const from = document.getElementById("from").value;
   const to = document.getElementById("to").value;
@@ -18,7 +17,6 @@ function getMode() {
   localStorage.setItem("level", level);
   localStorage.setItem("from", from);
   localStorage.setItem("to", to);
-
 }
 
 function randBetween(min, max) {
@@ -59,7 +57,7 @@ function createQuizFrame(){
     const button = document.createElement("button");
     button.className = "button is-primary is-fullwidth is-medium option";
     button.addEventListener("click", function() {
-      getAns(i);
+      getAns(i, this.value);
     });
     button.id = optionIds[i];
 
@@ -86,12 +84,11 @@ function genQuiz() {
     }
     options = shuffle(options);
     var rand = randBetween(0, 2);
-    var quis = options[rand];
-  } while (quizzes.includes(quis));
-    quizzes.push(quis);
+    var quiz = options[rand];
+  } while (quizzes.includes(quiz));
+    quizzes.push(quiz);
     corrBtnIdx.push(rand);
-  console.log(options);
-  console.log(corrBtnIdx);
+
   return options;
 }
 
@@ -108,6 +105,7 @@ function genPreText() {
       var preText = "元素名 ";
       break;
   }
+
   return preText;
 }
 
@@ -119,41 +117,44 @@ function displayQuiz() {
   var quiz = quizzes[curQuizIdx];
   var preText = genPreText();
 
-  var quiz = preText + elements_list[quiz][from];
+  quiz = preText + elements_list[quiz][from];
   quizFrame.textContent = quiz;
 
   const buttons = document.getElementsByClassName('option');
   for (let j = 0; j < 3; j++) {
     buttons[j].textContent = elements_list[options[j]][to];
-    buttons[j].value = elements_list[options[j]][to];
+    buttons[j].value = options[j];
   }
 
   console.log(curQuizIdx);
   curQuizIdx++;
 }
 
-function getAns(btnIdx) {
-  answers.push(btnIdx);
-  if (answers.length < 20) {
+function getAns(btnIdx, btnValue) {
+  ansBtnIdx.push(btnIdx);
+  if (ansBtnIdx.length < 20) {
     displayQuiz();
+    answers.push(btnValue);
   } else {
+    compareAnswer();
     console.log("end");
+    localStorage.setItem("quizzes", quizzes);
+    localStorage.setItem("answers", answers);
   }
 }
 
 function compareAnswer() {
-  var quizs = localStorage.getItem("quizs");
-  var answer = localStorage.getItem("answer");
-  tORf = [];
+  var tORf = [];
   for (var i = 0; i < 20; i++) {
-    if (elements_list[quizs[i]][0] == answer[i]) {
-      tORf.push(true);
+    if (answers[i] == quizzes[i]) {
+      tORf.push("正解");
     } else {
-      tORf.push(false);
+      tORf.push("不正解");
     }
   }
-
   localStorage.setItem("tORf", tORf);
+  clearMainScreen();
+  displayScore();
 }
 
 start_button.addEventListener("click", function() {
