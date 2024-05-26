@@ -1,7 +1,7 @@
 ﻿{
     "name": "元素の学習ツール",
     "short_name": "元素",
-    "start_url": "/index.html",
+    "start_url": "atom-quiz-v2/index.html",
     "scope": "/",
     "display": "standalone",
     "icons": [
