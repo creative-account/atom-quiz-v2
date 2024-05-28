@@ -9,3 +9,11 @@
 #quizFrame {
   word-break: keep-all;
 }
+
+.flex-button{
+  flex-basis: 25%;
+}
+
+.score-item {
+  flex-basis: 12.5%;
+}

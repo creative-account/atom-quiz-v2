@@ -144,12 +144,11 @@ function displayScore() {
   const wrongCount = correctness.length - correctCount;
   const scoreDiv = document.createElement('div');
   scoreDiv.classList.add('box');
-  const columnsDiv = document.createElement('div');
-  columnsDiv.classList.add('columns');
-  for (let i = 0; i < 5; i++) {
-    const column = document.createElement('div');
-    column.classList.add('column');
-    if (i === 1) {
+  const flexBoxDiv = document.createElement('div');
+  flexBoxDiv.classList.add('is-flex', 'is-justify-content-space-around');
+  for (let i = 0; i < 2; i++) {
+    const flexItem = document.createElement('div', 'score-item');
+    if (i === 0) {
       const checkSpan = document.createElement('span');
       checkSpan.classList.add('material-symbols-outlined', 'correct', 'has-text-success', 'mr-4', 'big-icon');
       checkSpan.textContent = 'check';
@@ -157,9 +156,9 @@ function displayScore() {
       correctSpan.classList.add('is-size-3', 'has-text-centered');
       correctSpan.id = 'correct';
       correctSpan.textContent = correctCount;
-      column.appendChild(checkSpan);
-      column.appendChild(correctSpan);
-    } else if (i === 3) {
+      flexItem.appendChild(checkSpan);
+      flexItem.appendChild(correctSpan);
+    } else if (i === 1) {
       const closeSpan = document.createElement('span');
       closeSpan.classList.add('material-symbols-outlined', 'has-text-danger', 'mr-4', 'big-icon');
       closeSpan.textContent = 'close';
@@ -167,12 +166,12 @@ function displayScore() {
       wrongSpan.classList.add('is-size-3', 'has-text-centered');
       wrongSpan.id = 'wrong';
       wrongSpan.textContent = wrongCount;
-      column.appendChild(closeSpan);
-      column.appendChild(wrongSpan);
+      flexItem.appendChild(closeSpan);
+      flexItem.appendChild(wrongSpan);
     }
-    columnsDiv.appendChild(column);
+    flexBoxDiv.appendChild(flexItem);
   }
-  scoreDiv.appendChild(columnsDiv);
+  scoreDiv.appendChild(flexBoxDiv);
   mainScreen.appendChild(scoreDiv);
 
   displayAnswerTable();
@@ -219,27 +218,23 @@ function displayAnswerTable() {
 
 function createActionButtons() {
   const actionDiv = document.createElement('div');
-  actionDiv.classList.add('columns');
-  for (let i = 0; i < 5; i++) {
-  const columnDiv = document.createElement('div');
-  columnDiv.classList.add('column');
-  if (i === 1) {
+  actionDiv.classList.add('is-flex', 'is-justify-content-space-around');
+  for (let i = 0; i < 2; i++) {
+  if (i === 0) {
     const retryButton = document.createElement("button");
-    retryButton.className = "button is-primary is-medium is-fullwidth";
+    retryButton.className = "button is-primary is-medium is-fullwidth flex-button";
     retryButton.id = "retry";
     retryButton.textContent = "Try Again";
     retryButton.addEventListener("click", retryQuiz);
-    columnDiv.appendChild(retryButton);
-  } else if (i === 3) {
+    actionDiv.appendChild(retryButton);
+  } else if (i === 1) {
     const selectModeButton = document.createElement("button");
-    selectModeButton.className = "button is-primary is-medium is-fullwidth";
+    selectModeButton.className = "button is-primary is-medium is-fullwidth flex-button";
     selectModeButton.id = "selectMode";
     selectModeButton.textContent = "Back Home";
     selectModeButton.addEventListener("click", selectMode);
-    columnDiv.appendChild(selectModeButton);
+    actionDiv.appendChild(selectModeButton);
   }
-
-  actionDiv.append(columnDiv);
   mainScreen.appendChild(actionDiv);
   }
 }
