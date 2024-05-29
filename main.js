@@ -218,7 +218,7 @@ function displayAnswerTable() {
 
 function createActionButtons() {
   const actionDiv = document.createElement('div');
-  actionDiv.classList.add('is-flex', 'is-justify-content-space-around');
+  actionDiv.classList.add('is-flex', 'is-justify-content-space-around', 'is-flex-wrap-wrap');
   for (let i = 0; i < 2; i++) {
   if (i === 0) {
     const retryButton = document.createElement("button");
