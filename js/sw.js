@@ -5,8 +5,8 @@ var urlsToCache = [
   'main.js',
   'mode_select.js',
   'theme.js',
-  'style.css',
-  'index.html'
+  '../style.css',
+  '../index.html'
 ];
 
 // インストール処理

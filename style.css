@@ -11,7 +11,9 @@
 }
 
 .flex-button{
-  flex-basis: 25%;
+  width: 25%;
+  flex-grow: 1;
+  flex-shrink: 1;
 }
 
 .score-item {

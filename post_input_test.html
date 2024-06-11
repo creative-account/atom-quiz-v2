@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Hello Bulma!</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.0/css/bulma.min.css">
+  </head>
+  <body>
+  <section class="section">
+    <div class="container">
+      <input type="text" id="input1" placeholder="Input 1"class="input mb-3"></input>
+      <input type="text" id="input2" placeholder="Input 2"class="input mb-3"></input>
+      <input type="text" id="input3" placeholder="Input 3"class="input mb-3"></input>
+      <button onclick="submitData()" class="button is-primary">Submit</button>
+    </div>
+  </section>
+  <script>
+    function submitData() {
+  const input1 = document.getElementById('input1').value;
+  const input2 = document.getElementById('input2').value;
+  const input3 = document.getElementById('input3').value;
+  
+  fetch('https://script.google.com/macros/s/AKfycbwZYk7M7OQ3FiTXzE6KD4MZ_iUczpnXnOKsyebkEtWM1k_Vzj5_KiXfjjlvTx5c3TR2iA/exec', {
+    method: 'POST',
+    mode: "no-cors",
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      input1: input1,
+      input2: input2,
+      input3: input3
+    })
+  })
+  .then(response => response.text())
+  .then(data => {
+    console.log(data); // Optionally handle the response
+  })
+  .catch(error => {
+    console.error('Error:', error);
+  });
+}
+
+  </script>
+  </body>
+</html>
