@@ -10,12 +10,17 @@
   word-break: keep-all;
 }
 
-.flex-button{
-  width: 25%;
+.flex > * {
+  flex-basis: 180px;
   flex-grow: 1;
-  flex-shrink: 1;
 }
 
 .score-item {
   flex-basis: 12.5%;
+}
+
+.flex {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
 }

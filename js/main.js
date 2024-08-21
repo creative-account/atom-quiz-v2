@@ -1,9 +1,11 @@
 import { elements_list } from "./data.js";
 import { clearMainScreen } from "./functions.js";
 import { isSameMode } from "./mode_select.js";
+import { openModal, closeModal, closeAllModals } from './modal.js';
 
 const startButton = document.getElementById("start");
 const mainScreen = document.getElementById("main_screen");
+const modal = document.getElementById('modal-js-example');
 let currentQuizIndex = 0;
 let difficultyLevel = 0;
 let fromAttribute = 0;
@@ -133,6 +135,7 @@ function compareAnswers() {
   correctness = quizzes.map((quiz, index) => userAnswers[index] == quiz ? "正解" : "不正解");
   clearMainScreen();
   displayScore();
+  openModal(modal);
 }
 
 function countCorrectAnswers() {
@@ -218,18 +221,18 @@ function displayAnswerTable() {
 
 function createActionButtons() {
   const actionDiv = document.createElement('div');
-  actionDiv.classList.add('is-flex', 'is-justify-content-space-around', 'is-flex-wrap-wrap');
+  actionDiv.classList.add('flex');
   for (let i = 0; i < 2; i++) {
   if (i === 0) {
     const retryButton = document.createElement("button");
-    retryButton.className = "button is-primary is-medium is-fullwidth flex-button";
+    retryButton.className = "button is-primary is-medium";
     retryButton.id = "retry";
     retryButton.textContent = "Try Again";
     retryButton.addEventListener("click", retryQuiz);
     actionDiv.appendChild(retryButton);
   } else if (i === 1) {
     const selectModeButton = document.createElement("button");
-    selectModeButton.className = "button is-primary is-medium is-fullwidth flex-button";
+    selectModeButton.className = "button is-primary is-medium";
     selectModeButton.id = "selectMode";
     selectModeButton.textContent = "Back Home";
     selectModeButton.addEventListener("click", selectMode);
